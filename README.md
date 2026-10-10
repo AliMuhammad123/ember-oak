@@ -29,6 +29,10 @@ npm run start -- -H 0.0.0.0 -p 3000
 
 On Windows you can double-click **`start-site.bat`**. It builds the site the first time, then starts it and prints the address to open on other devices on the same Wi-Fi.
 
+## GitHub Pages
+
+Every push to `main` builds a static version and publishes it to **https://alimuhammad123.github.io/ember-oak/** (`.github/workflows/deploy-pages.yml`). To build it locally, set `GITHUB_PAGES=true` before `npm run build`. The site is written to `out/`.
+
 ## Where things are
 
 | What | File |

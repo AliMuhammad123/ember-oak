@@ -1,3 +1,6 @@
+/** Prefix for files in /public — set to "/ember-oak" for the GitHub Pages build. */
+export const asset = (path: string) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${path}`;
+
 export const img = (id: string) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&q=80`;
 
@@ -9,18 +12,18 @@ export const images = {
 
 /** Restaurant photography in /public/images. */
 export const local = {
-  langoustine: "/images/langoustine.jpg",
-  brunchTable: "/images/brunch-table.jpg",
-  diningHall: "/images/dining-hall.jpg",
-  interiorLamps: "/images/interior-lamps.jpg",
-  diningRoom: "/images/dining-room.jpg",
-  platedService: "/images/plated-service.jpg",
-  searedSalmon: "/images/seared-salmon.jpg",
-  salmonCurry: "/images/salmon-curry.jpg",
-  salmonCurryPlate: "/images/salmon-curry-plate.jpg",
-  breakfastSpread: "/images/breakfast-spread.jpg",
-  skewers: "/images/skewers.jpg",
-  tableWine: "/images/table-wine.jpg",
+  langoustine: asset("/images/langoustine.jpg"),
+  brunchTable: asset("/images/brunch-table.jpg"),
+  diningHall: asset("/images/dining-hall.jpg"),
+  interiorLamps: asset("/images/interior-lamps.jpg"),
+  diningRoom: asset("/images/dining-room.jpg"),
+  platedService: asset("/images/plated-service.jpg"),
+  searedSalmon: asset("/images/seared-salmon.jpg"),
+  salmonCurry: asset("/images/salmon-curry.jpg"),
+  salmonCurryPlate: asset("/images/salmon-curry-plate.jpg"),
+  breakfastSpread: asset("/images/breakfast-spread.jpg"),
+  skewers: asset("/images/skewers.jpg"),
+  tableWine: asset("/images/table-wine.jpg"),
 };
 
 export type Dish = {
@@ -116,9 +119,9 @@ export const menu: MenuCategory[] = [
 export const gallery = [
   { src: img("photo-1414235077428-338989a2e8c0"), alt: "Guests sharing a plated dish over wine", ratio: "aspect-[4/5]" },
   { src: img("photo-1504674900247-0877df9cc836"), alt: "Grilled beef salad with herbs and chilli", ratio: "aspect-[4/3]" },
-  { src: "/images/dining-hall.jpg", alt: "Looking down on the marble dining hall at afternoon tea", ratio: "aspect-[4/5]" },
-  { src: "/images/breakfast-spread.jpg", alt: "A table of weekend brunch plates, berries and coffee", ratio: "aspect-[4/3]" },
-  { src: "/images/table-wine.jpg", alt: "A table set with grilled meats, decanted red wine and fresh juice", ratio: "aspect-[4/5]" },
+  { src: asset("/images/dining-hall.jpg"), alt: "Looking down on the marble dining hall at afternoon tea", ratio: "aspect-[4/5]" },
+  { src: asset("/images/breakfast-spread.jpg"), alt: "A table of weekend brunch plates, berries and coffee", ratio: "aspect-[4/3]" },
+  { src: asset("/images/table-wine.jpg"), alt: "A table set with grilled meats, decanted red wine and fresh juice", ratio: "aspect-[4/5]" },
   { src: img("photo-1476224203421-9ac39bcb3327"), alt: "Grilled halloumi with flatbread and dip", ratio: "aspect-[4/3]" },
 ];
 

@@ -1,4 +1,4 @@
-import { img, local } from "./data";
+import { asset, img, local } from "./data";
 
 /** Square, CORS-enabled JPEG for use as a WebGL texture. */
 const tex = (id: string) =>
@@ -177,10 +177,10 @@ export const dishesIn = (c: CategoryId) => dishes.filter((d) => d.category === c
 
 /** Hero signatures: real photographs (square, dish-centred) with estimated depth maps. */
 export const heroShots = [
-  { id: "ember-skewers", src: "/images/round-skewers.jpg", depth: "/images/round-skewers-depth.png" },
-  { id: "seared-salmon", src: "/images/round-salmon.jpg", depth: "/images/round-salmon-depth.png" },
-  { id: "langoustine", src: "/images/round-langoustine.jpg", depth: "/images/round-langoustine-depth.png" },
-  { id: "salmon-curry", src: "/images/round-curry.jpg", depth: "/images/round-curry-depth.png" },
+  { id: "ember-skewers", src: asset("/images/round-skewers.jpg"), depth: asset("/images/round-skewers-depth.png") },
+  { id: "seared-salmon", src: asset("/images/round-salmon.jpg"), depth: asset("/images/round-salmon-depth.png") },
+  { id: "langoustine", src: asset("/images/round-langoustine.jpg"), depth: asset("/images/round-langoustine-depth.png") },
+  { id: "salmon-curry", src: asset("/images/round-curry.jpg"), depth: asset("/images/round-curry-depth.png") },
 ];
 export const signatures = heroShots.map((s) => dishById(s.id)!);
 
