@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #14100d;
+  --color-char: #1c1612;
+  --color-coal: #272019;
+  --color-line: #3b3029;
+  --color-cream: #f5ede3;
+  --color-stone: #bcae9f;
+  --color-ember: #dc2626;
+  --color-ember-deep: #b91c1c;
+  --color-gold: #d9a854;
+
+  --font-display: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+::selection {
+  background: var(--color-ember);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 0 1.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, transform 0.15s;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .btn-primary {
+    background: var(--color-ember);
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-ember-deep);
+  }
+  .btn-ghost {
+    border: 1px solid color-mix(in oklab, var(--color-cream) 40%, transparent);
+    color: var(--color-cream);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold);
+  }
+  .text-gold-gradient {
+    background: linear-gradient(180deg, #f4d690 0%, #dcab55 50%, #b07d2e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: var(--color-gold);
+  }
+  .field {
+    width: 100%;
+    min-height: 48px;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-ink);
+    padding: 0.7rem 1rem;
+    color: var(--color-cream);
+    color-scheme: dark;
+    transition: border-color 0.2s;
+  }
+  .field:hover {
+    border-color: color-mix(in oklab, var(--color-stone) 60%, transparent);
+  }
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-gold) 30%, transparent);
+  }
+  .field[aria-invalid="true"] {
+    border-color: #f87171;
+  }
+}
+
+/* Marquee: CSS-driven so it can be paused and is stopped for reduced motion */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 45s linear infinite;
+}
+.marquee-track[data-paused="true"] {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ---------- Cinematic film grain ---------- */
+.grain {
+  position: fixed;
+  inset: -50%;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 7s steps(8) infinite;
+}
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -5%); }
+  60% { transform: translate(-6%, -2%); }
+  80% { transform: translate(5%, 4%); }
+}
+
+/* Intro failsafe: if JavaScript never runs, the curtain still clears. */
+.intro-failsafe {
+  animation: intro-failsafe 0.4s ease 4.5s forwards;
+}
+@keyframes intro-failsafe {
+  to { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain { animation: none; }
+  .intro-failsafe { animation-delay: 0.6s; }
+}
+
+/* Slow Ken Burns zoom for photo banners in the menu book */
+@keyframes kenburns {
+  from { transform: scale(1.04) translate(0, 0); }
+  to { transform: scale(1.16) translate(-1.5%, -1%); }
+}
+.kenburns {
+  animation: kenburns 14s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .kenburns { animation: none; }
+}
