@@ -18,7 +18,7 @@ export function SmoothScroll() {
   useEffect(() => {
     if (reduce) return;
     const lenis = new Lenis({
-      lerp: 0.085,
+      lerp: 0.075,
       wheelMultiplier: 0.9,
       autoRaf: true,
       anchors: { offset: -80 },

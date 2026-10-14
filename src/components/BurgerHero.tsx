@@ -19,7 +19,7 @@ import { Magnetic, ease } from "./motion";
 import { INTRO_SECONDS } from "./fx/Intro";
 
 /** Frames pulled from the burger film; scrolling scrubs through them like a video. */
-const FRAMES = 96;
+const FRAMES = 192;
 const LAST_FRAME_AT = 0.86; // scroll progress at which the film reaches its final frame
 const FOCUS_X = 0.53; // keep the burger centred when the frame is cropped (portrait screens)
 const frameSrc = (i: number, small: boolean) =>
@@ -40,13 +40,18 @@ function useFilmCanvas(progress: MotionValue<number>, active: boolean) {
 
   useEffect(() => {
     const small = window.matchMedia("(max-width: 767px)").matches;
-    const list: HTMLImageElement[] = [];
-    for (let i = 0; i < FRAMES; i++) {
+    const list: HTMLImageElement[] = new Array(FRAMES);
+    // Coarse-to-fine: every 16th frame first, then fill the gaps, so scrubbing works while the rest stream in.
+    const order: number[] = [];
+    for (const step of [16, 8, 4, 2, 1]) for (let i = 0; i < FRAMES; i += step) if (!order.includes(i)) order.push(i);
+    for (const i of order) {
       const img = new Image();
       img.decoding = "async";
-      if (i < 4) img.fetchPriority = "high";
+      if (i < 16) img.fetchPriority = "high";
       img.src = frameSrc(i, small);
-      list.push(img);
+      // Decode ahead of time so drawing a frame never stalls the scroll.
+      img.decode().then(() => (img.dataset.ready = "1"), () => {});
+      list[i] = img;
     }
     frames.current = list;
     return () => {
@@ -57,7 +62,7 @@ function useFilmCanvas(progress: MotionValue<number>, active: boolean) {
   useEffect(() => {
     const el = canvas.current;
     if (!el || !active) return;
-    const ctx = el.getContext("2d");
+    const ctx = el.getContext("2d", { alpha: false });
     if (!ctx) return;
 
     let raf = 0;
@@ -67,7 +72,7 @@ function useFilmCanvas(progress: MotionValue<number>, active: boolean) {
 
     const ready = (i: number) => {
       const img = frames.current[i];
-      return img && img.complete && img.naturalWidth > 0 ? img : null;
+      return img && img.dataset.ready ? img : null;
     };
     const nearestReady = (i: number) => {
       for (let d = 0; d < FRAMES; d++) {
@@ -79,7 +84,8 @@ function useFilmCanvas(progress: MotionValue<number>, active: boolean) {
 
     const tick = (now: number) => {
       raf = requestAnimationFrame(tick);
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // The film is 1280px wide, so a bigger backing store only costs time per frame.
+      const dpr = Math.min(window.devicePixelRatio || 1, 2, 1600 / Math.max(el.clientWidth, 1));
       const w = Math.round(el.clientWidth * dpr);
       const h = Math.round(el.clientHeight * dpr);
       if (el.width !== w || el.height !== h) {
@@ -89,9 +95,9 @@ function useFilmCanvas(progress: MotionValue<number>, active: boolean) {
 
       const scroll = Math.min(progress.get() / LAST_FRAME_AT, 1) * (FRAMES - 1);
       // Idle: while resting at the top, rock through the first frames so the steam keeps drifting.
-      const idle = (1 - Math.cos((now - started) / 1400)) * 3 * Math.max(0, 1 - scroll / 4);
+      const idle = (1 - Math.cos((now - started) / 1400)) * 6 * Math.max(0, 1 - scroll / 8);
       const f = Math.min(FRAMES - 1, scroll + idle);
-      if (Math.abs(f - last) < 0.004 && w === lastW) return;
+      if (Math.abs(f - last) < 0.01 && w === lastW) return;
 
       const i0 = Math.floor(f);
       const a = ready(i0) ?? nearestReady(i0);
@@ -212,17 +218,25 @@ function FilmHero() {
         {/* Film */}
         <motion.div
           className="absolute inset-0"
-          initial={{ scale: 1.25, filter: "brightness(0.3) blur(6px)" }}
-          animate={{ scale: 1, filter: "brightness(1) blur(0px)" }}
+          initial={{ scale: 1.25 }}
+          animate={{ scale: 1 }}
           transition={{ duration: 2.4, ease, delay: d - 0.6 }}
         >
-          <motion.div style={{ x: filmX, y: filmY, scale: filmScale }} className="absolute inset-0">
+          <motion.div style={{ x: filmX, y: filmY, scale: filmScale }} className="absolute inset-0 will-change-transform">
             {/* First frame doubles as the instant poster while the rest load. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={frameSrc(0, false)} alt="" fetchPriority="high" className="absolute inset-0 size-full object-cover" style={{ objectPosition: `${FOCUS_X * 100}% 50%` }} />
             <canvas ref={canvas} aria-hidden className="absolute inset-0 size-full" />
           </motion.div>
         </motion.div>
+
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-ink"
+          initial={{ opacity: 0.75 }}
+          animate={{ opacity: 0 }}
+          transition={{ duration: 2, ease, delay: d - 0.4 }}
+        />
 
         {/* Legibility shading */}
         <motion.div

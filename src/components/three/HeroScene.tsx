@@ -4,9 +4,10 @@ import { Suspense, useEffect, useLayoutEffect, useMemo, useRef, useState } from 
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Sparkles, useTexture } from "@react-three/drei";
+import { Warmup } from "./Warmup";
 import type { MotionValue } from "motion/react";
 import { heroShots } from "@/lib/dishes";
-import { Embers, Steam, WarmLighting } from "./Atmosphere";
+import { Embers, Steam } from "./Atmosphere";
 
 const DISSOLVE_SECONDS = 1.6;
 const RIM_INNER = 0.5; // photo radius in plane units (plane is 1×1)
@@ -208,16 +209,16 @@ function RoundPlate({
         {/* Dark ceramic rim */}
         <mesh position={[0, 0, -0.005]}>
           <ringGeometry args={[RIM_INNER - 0.01, RIM_OUTER, 128]} />
-          <meshPhysicalMaterial color="#1b1714" roughness={0.35} clearcoat={1} clearcoatRoughness={0.15} />
+          <meshLambertMaterial color="#2a231e" />
         </mesh>
         {/* Gold rim edges */}
         <mesh>
           <torusGeometry args={[RIM_OUTER, 0.006, 12, 160]} />
-          <meshStandardMaterial color="#d9a854" metalness={1} roughness={0.25} />
+          <meshBasicMaterial color="#d9a854" toneMapped={false} />
         </mesh>
         <mesh>
           <torusGeometry args={[RIM_INNER + 0.002, 0.003, 10, 160]} />
-          <meshStandardMaterial color="#b88a3e" metalness={1} roughness={0.35} />
+          <meshBasicMaterial color="#b88a3e" toneMapped={false} />
         </mesh>
         {/* The real dish photograph */}
         <mesh position={[0, 0, 0.001]}>
@@ -244,15 +245,19 @@ export default function HeroScene({
 }) {
   return (
     <Canvas
+      // Only re-measure on resize: re-measuring on scroll reconfigures the renderer mid-scroll.
+      resize={{ scroll: false }}
       dpr={[1, 1.75]}
       camera={{ position: [0, 0, 5], fov: 34 }}
       gl={{ antialias: true, alpha: true }}
       frameloop={active ? (still ? "demand" : "always") : "never"}
       aria-hidden
     >
-      <WarmLighting />
+      <ambientLight intensity={0.6} />
+      <spotLight position={[3, 6, 3]} angle={0.55} penumbra={1} intensity={70} color="#ffd9a0" />
       <Suspense fallback={null}>
         <RoundPlate index={index} still={still} scroll={scroll} entryDelay={entryDelay} />
+        <Warmup delay={2500} />
       </Suspense>
       {/* Embers and steam float in front of the plate for extra depth. */}
       <group position={[0, -2, 1]}>

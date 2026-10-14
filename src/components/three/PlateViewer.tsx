@@ -37,6 +37,8 @@ export default function PlateViewer({ dish, still }: { dish: Dish; still: boolea
   return (
     <div className="relative h-full w-full">
       <Canvas
+        // Only re-measure on resize: re-measuring on scroll reconfigures the renderer mid-scroll.
+        resize={{ scroll: false }}
         shadows
         dpr={[1, 2]}
         camera={{ position: [0, 3.3, 4.7], fov: 36 }}

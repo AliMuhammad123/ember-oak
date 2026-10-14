@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { Canvas, useFrame } from "@react-three/fiber";
 import type { MotionValue } from "motion/react";
 import { Embers } from "./Atmosphere";
+import { Warmup } from "./Warmup";
 
 /** Full-screen procedural fire: a glowing charcoal bed with flames licking upwards. */
 const vertex = /* glsl */ `
@@ -93,6 +94,8 @@ function FirePlane({ intensity }: { intensity: MotionValue<number> }) {
 export default function FireCanvas({ intensity, active }: { intensity: MotionValue<number>; active: boolean }) {
   return (
     <Canvas
+      // Only re-measure on resize: re-measuring on scroll reconfigures the renderer mid-scroll.
+      resize={{ scroll: false }}
       dpr={[1, 1.5]}
       camera={{ position: [0, 0, 5], fov: 40 }}
       gl={{ antialias: false, alpha: true }}
@@ -100,6 +103,7 @@ export default function FireCanvas({ intensity, active }: { intensity: MotionVal
       aria-hidden
     >
       <FirePlane intensity={intensity} />
+      <Warmup delay={3500} />
       <group position={[0, -2.6, 1]}>
         <Embers count={70} boost={intensity} />
       </group>
