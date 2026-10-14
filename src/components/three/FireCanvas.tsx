@@ -41,15 +41,15 @@ const fragment = /* glsl */ `
     vec2 q = vec2(x * 2.4, uv.y * 2.2 - uTime * 1.35);
     float warp = fbm(q * 0.8 + vec2(0.0, uTime * 0.25));
     float n = fbm(q + warp * 1.6);
-    float height = 0.36 * uIntensity;
-    float flame = n * 1.15 - uv.y / max(height, 0.001) + 0.35;
+    float height = 0.22 * uIntensity;
+    float flame = n * 1.05 - uv.y / max(height, 0.001) + 0.2;
     flame = clamp(flame, 0.0, 1.0) * smoothstep(0.0, 0.25, uIntensity);
 
     vec3 col = vec3(0.0);
     col = mix(col, vec3(0.55, 0.05, 0.0), smoothstep(0.02, 0.3, flame));
     col = mix(col, vec3(1.0, 0.38, 0.02), smoothstep(0.25, 0.6, flame));
-    col = mix(col, vec3(1.0, 0.82, 0.45), smoothstep(0.6, 0.95, flame));
-    float alpha = smoothstep(0.02, 0.35, flame);
+    col = mix(col, vec3(1.0, 0.7, 0.35), smoothstep(0.7, 1.0, flame));
+    float alpha = smoothstep(0.02, 0.35, flame) * 0.7;
 
     // Charcoal bed: dark lumps with pulsing orange cracks.
     float bed = smoothstep(0.17, 0.0, uv.y);
@@ -101,7 +101,7 @@ export default function FireCanvas({ intensity, active }: { intensity: MotionVal
     >
       <FirePlane intensity={intensity} />
       <group position={[0, -2.6, 1]}>
-        <Embers count={160} boost={intensity} />
+        <Embers count={70} boost={intensity} />
       </group>
     </Canvas>
   );

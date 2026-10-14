@@ -9,7 +9,6 @@ import { local } from "@/lib/data";
 import { signatures } from "@/lib/dishes";
 import { money, useOrder } from "./order/OrderProvider";
 import { Magnetic, ease } from "./motion";
-import { INTRO_SECONDS } from "./fx/Intro";
 
 const HeroScene = dynamic(() => import("./three/HeroScene"), {
   ssr: false,
@@ -46,10 +45,10 @@ export function Hero3D() {
   };
 
   const active = signatures[index];
-  const introDelay = reduce ? 0 : INTRO_SECONDS; // let the curtains open first
+  const introDelay = 0; // entrances play when the section scrolls into view
 
   return (
-    <section ref={ref} id="top" className="relative isolate overflow-hidden pt-28 pb-16 md:pt-32">
+    <section ref={ref} id="signatures" className="relative isolate overflow-hidden py-24 md:py-28">
       {/* Atmospheric backdrop */}
       <motion.div
         aria-hidden
@@ -58,7 +57,7 @@ export function Hero3D() {
         animate={reduce ? undefined : { scale: 1.2 }}
         transition={{ duration: 26, ease: "linear", repeat: Infinity, repeatType: "reverse" }}
       >
-        <Image src={local.diningRoom} alt="" fill priority sizes="100vw" className="object-cover opacity-35" />
+        <Image src={local.diningRoom} alt="" fill sizes="100vw" className="object-cover opacity-35" />
       </motion.div>
       <div
         aria-hidden
@@ -69,24 +68,27 @@ export function Hero3D() {
         <motion.p
           className="eyebrow"
           initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, ease, delay: introDelay }}
         >
-          Wood-fired fine dining · Est. 2014
+          Signature plates · in 3D
         </motion.p>
-        <motion.h1
+        <motion.h2
           className="text-gold-gradient mx-auto mt-5 max-w-4xl font-display text-5xl leading-[1.04] sm:text-7xl lg:text-8xl"
           initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true }}
           transition={{ duration: 1.1, ease, delay: introDelay + 0.1 }}
         >
           A Symphony of <br className="hidden sm:block" />
           <em>Fire</em> &amp; Flavour
-        </motion.h1>
+        </motion.h2>
         <motion.p
           className="mx-auto mt-6 max-w-xl text-lg text-stone"
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: introDelay + 0.5 }}
         >
           Seasonal plates cooked over live oak. Book a table by the fire, or order our kitchen&rsquo;s
@@ -95,7 +97,8 @@ export function Hero3D() {
         <motion.div
           className="mt-8 flex flex-wrap justify-center gap-4"
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.7, ease, delay: introDelay + 0.65 }}
         >
           <Magnetic>
@@ -128,7 +131,8 @@ export function Hero3D() {
               <motion.li
                 key={d.id}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
                 transition={{ duration: 0.6, ease, delay: introDelay + 0.9 + i * 0.08 }}
                 className={`relative flex w-[78vw] shrink-0 snap-center items-center gap-3 rounded-2xl border p-3 backdrop-blur-md transition-colors duration-300 sm:w-auto ${
                   selected ? "border-gold/70 bg-gold/10" : "border-line bg-char/70 hover:border-gold/40"

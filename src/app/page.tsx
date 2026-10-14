@@ -1,3 +1,4 @@
+import { BurgerHero } from "@/components/BurgerHero";
 import { ExperienceBand } from "@/components/ExperienceBand";
 import { Features } from "@/components/Features";
 import { FireScene } from "@/components/FireScene";
@@ -27,9 +28,10 @@ export default function Home() {
       <ScrollProgress />
       <Navbar actions={<CartNavButton />} />
       <main id="main">
+        <BurgerHero />
+        <Marquee />
         <Hero3D />
         <FireScene />
-        <Marquee />
         <Features />
         <Showcase />
         <MenuBook />

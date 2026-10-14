@@ -86,6 +86,15 @@ export const dishes: Dish[] = [
     allergens: [],
     tag: "Signature",
   }),
+  dish("ember-smash", local.burger, {
+    name: "Ember smash burger",
+    description: "Double oak-smashed beef, aged cheddar, smoked bacon, tomato, rocket and house sauce on a toasted brioche — with skin-on fries.",
+    price: 24,
+    category: "fire",
+    ingredients: ["Beef patties", "Aged cheddar", "Smoked bacon", "Tomato", "Red onion", "Rocket", "Brioche bun", "Fries"],
+    allergens: ["Gluten", "Dairy", "Egg", "Mustard"],
+    tag: "Most loved",
+  }),
   dish("salmon-curry", local.salmonCurry, {
     name: "Coconut salmon curry",
     description: "Oven-roasted salmon in a smoked coconut and tomato sauce, lemon, oregano.",

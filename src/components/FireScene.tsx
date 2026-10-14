@@ -115,7 +115,7 @@ function ScrollScene() {
   const skRotate = useTransform(p, [0, 0.36], [-8, 6]);
   const skScale = useTransform(p, [0, 0.3, 0.37], [0.92, 1.04, 1.12]);
   const skOpacity = useTransform(p, [0.33, 0.37], [1, 0]);
-  const skGlow = useTransform(p, [0, 0.3], [0.2, 0.9]);
+  const skGlow = useTransform(p, [0, 0.3], [0.15, 0.5]);
   const skFilter = useTransform(skGlow, (g) => `drop-shadow(0 0 ${40 * g}px rgba(255,120,30,${g * 0.7}))`);
 
   // Act 2 — Let it fall

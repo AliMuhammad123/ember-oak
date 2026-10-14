@@ -24,6 +24,7 @@ export const local = {
   breakfastSpread: asset("/images/breakfast-spread.jpg"),
   skewers: asset("/images/skewers.jpg"),
   tableWine: asset("/images/table-wine.jpg"),
+  burger: asset("/images/burger.jpg"),
 };
 
 export type Dish = {
