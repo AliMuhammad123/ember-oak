@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Karla, Playfair_Display } from "next/font/google";
+import { Anton, Karla, Playfair_Display } from "next/font/google";
 import { MotionProvider } from "@/components/motion";
 import "./globals.css";
 
@@ -7,6 +7,13 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   style: ["normal", "italic"],
+  display: "swap",
+});
+
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: "400",
   display: "swap",
 });
 
@@ -28,7 +35,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${playfair.variable} ${karla.variable} antialiased`}>
+    <html lang="en" className={`${playfair.variable} ${karla.variable} ${anton.variable} antialiased`}>
       <body className="min-h-dvh">
         <a
           href="#main"

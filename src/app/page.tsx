@@ -1,5 +1,6 @@
 import { ExperienceBand } from "@/components/ExperienceBand";
 import { Features } from "@/components/Features";
+import { FireScene } from "@/components/FireScene";
 import { Footer } from "@/components/Footer";
 import { Gallery } from "@/components/Gallery";
 import { Hero3D } from "@/components/Hero3D";
@@ -16,15 +17,18 @@ import { CartNavButton, FloatingCart, ScrollProgress, Toast } from "@/components
 import { OrderProvider } from "@/components/order/OrderProvider";
 import { Cursor } from "@/components/fx/Cursor";
 import { Intro } from "@/components/fx/Intro";
+import { SmoothScroll } from "@/components/fx/SmoothScroll";
 
 export default function Home() {
   return (
     <OrderProvider>
+      <SmoothScroll />
       <Intro />
       <ScrollProgress />
       <Navbar actions={<CartNavButton />} />
       <main id="main">
         <Hero3D />
+        <FireScene />
         <Marquee />
         <Features />
         <Showcase />

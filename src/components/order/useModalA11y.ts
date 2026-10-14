@@ -42,11 +42,13 @@ export function useModalA11y(open: boolean, ref: RefObject<HTMLElement | null>, 
     document.addEventListener("keydown", onKey);
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    window.__lenis?.stop();
 
     return () => {
       window.clearTimeout(t);
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = overflow;
+      window.__lenis?.start();
       previous?.focus?.();
     };
   }, [open, ref]);

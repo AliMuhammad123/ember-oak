@@ -81,6 +81,7 @@ function Drawer({ onClose }: { onClose: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="cart-title"
+        data-lenis-prevent
         className="absolute inset-y-0 right-0 flex w-full max-w-md flex-col border-l border-line bg-char shadow-2xl"
         initial={{ x: "100%" }}
         animate={{ x: 0, transition: { duration: 0.45, ease } }}

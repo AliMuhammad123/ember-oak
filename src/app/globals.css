@@ -13,6 +13,7 @@
 
   --font-display: var(--font-playfair), Georgia, serif;
   --font-sans: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
+  --font-impact: var(--font-anton), "Arial Narrow", Impact, sans-serif;
 }
 
 html {

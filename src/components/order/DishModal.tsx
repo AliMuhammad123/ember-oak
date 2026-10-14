@@ -42,6 +42,7 @@ function DishDialog({ dish, onClose }: { dish: Dish; onClose: () => void }) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="dish-title"
+        data-lenis-prevent
         className="relative grid max-h-[94dvh] w-full max-w-5xl overflow-y-auto rounded-t-3xl border border-line bg-char shadow-2xl md:grid-cols-2 sm:rounded-3xl"
         initial={{ y: 60, scale: 0.97 }}
         animate={{ y: 0, scale: 1, transition: { duration: 0.45, ease } }}

@@ -123,7 +123,7 @@ function CategoryPage({ title, category, number }: { title: string; category: Ca
   return (
     <PageFrame number={number}>
       <Banner src={b.src} title={title} kicker={b.kicker} position={b.position} />
-      <ul className="mt-2 flex min-h-0 flex-1 flex-col justify-center-safe overflow-y-auto">
+      <ul data-lenis-prevent className="mt-2 flex min-h-0 flex-1 flex-col justify-center-safe overflow-y-auto">
         {dishesIn(category).map((d, i) => (
           <DishRow key={d.id} dish={d} index={i} />
         ))}
@@ -180,7 +180,7 @@ function renderPage(p: number, goNext: () => void): ReactNode {
       return (
         <PageFrame number={6}>
           <Banner src={local.tableWine} title="Drinks" kicker="Cellar & bar" position="50% 55%" />
-          <ul className="mt-3 flex min-h-0 flex-1 flex-col justify-center-safe gap-3 overflow-y-auto px-1">
+          <ul data-lenis-prevent className="mt-3 flex min-h-0 flex-1 flex-col justify-center-safe gap-3 overflow-y-auto px-1">
             {drinks.map((d) => (
               <li key={d.name}>
                 <div className="flex items-baseline gap-2">
