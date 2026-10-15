@@ -8,6 +8,7 @@ import { ArrowRight, Flame } from "lucide-react";
 import { asset } from "@/lib/data";
 import { dishById } from "@/lib/dishes";
 import { money, useOrder } from "./order/OrderProvider";
+import { useDeferredMount } from "./useDeferredMount";
 
 const FireCanvas = dynamic(() => import("./three/FireCanvas"), { ssr: false });
 
@@ -99,6 +100,7 @@ export function FireScene() {
 function ScrollScene() {
   const section = useRef<HTMLElement>(null);
   const inView = useInView(section, { margin: "200px 0px" });
+  const mountFire = useDeferredMount(section, 1500);
   const { openDish } = useOrder();
   const skewers = dishById("ember-skewers")!;
   const { scrollYProgress: p } = useScroll({ target: section, offset: ["start start", "end end"] });
@@ -137,7 +139,7 @@ function ScrollScene() {
       <motion.div style={{ backgroundColor: bg }} className="sticky top-0 h-dvh overflow-hidden">
         {/* Live fire */}
         <motion.div style={{ opacity: fireOpacity }} className="pointer-events-none absolute inset-0 z-[15]">
-          <FireCanvas intensity={fire} active={inView} />
+          {mountFire && <FireCanvas intensity={fire} active={inView} />}
         </motion.div>
 
         {/* Act 1 */}

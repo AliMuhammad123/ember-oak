@@ -9,6 +9,7 @@ import { local } from "@/lib/data";
 import { signatures } from "@/lib/dishes";
 import { money, useOrder } from "./order/OrderProvider";
 import { Magnetic, ease } from "./motion";
+import { useDeferredMount } from "./useDeferredMount";
 
 const HeroScene = dynamic(() => import("./three/HeroScene"), {
   ssr: false,
@@ -25,6 +26,7 @@ export function Hero3D() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const inView = useInView(ref, { margin: "0px 0px -10% 0px" });
+  const mount3d = useDeferredMount(ref);
   const { openDish } = useOrder();
   const [index, setIndex] = useState(0);
   const [autoplay, setAutoplay] = useState(true);
@@ -116,7 +118,13 @@ export function Hero3D() {
 
       {/* 3D plate */}
       <motion.div style={{ y: sceneY }} className="relative mx-auto mt-2 h-[46vh] min-h-[320px] max-w-6xl md:h-[60vh]">
-        <HeroScene index={index} active={inView} still={!!reduce} scroll={scrollYProgress} entryDelay={introDelay} />
+        {mount3d ? (
+          <HeroScene index={index} active={inView} still={!!reduce} scroll={scrollYProgress} entryDelay={introDelay} />
+        ) : (
+          <div className="flex h-full items-center justify-center">
+            <div className="size-48 animate-pulse rounded-full bg-gradient-to-b from-cream/10 to-transparent" />
+          </div>
+        )}
       </motion.div>
 
       {/* Signature selector */}

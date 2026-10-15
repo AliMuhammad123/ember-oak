@@ -257,7 +257,7 @@ export default function HeroScene({
       <spotLight position={[3, 6, 3]} angle={0.55} penumbra={1} intensity={70} color="#ffd9a0" />
       <Suspense fallback={null}>
         <RoundPlate index={index} still={still} scroll={scroll} entryDelay={entryDelay} />
-        <Warmup delay={2500} />
+        <Warmup delay={400} />
       </Suspense>
       {/* Embers and steam float in front of the plate for extra depth. */}
       <group position={[0, -2, 1]}>

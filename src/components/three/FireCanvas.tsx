@@ -103,7 +103,7 @@ export default function FireCanvas({ intensity, active }: { intensity: MotionVal
       aria-hidden
     >
       <FirePlane intensity={intensity} />
-      <Warmup delay={3500} />
+      <Warmup delay={400} />
       <group position={[0, -2.6, 1]}>
         <Embers count={70} boost={intensity} />
       </group>

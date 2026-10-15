@@ -17,6 +17,7 @@ import { dishById } from "@/lib/dishes";
 import { money, useOrder } from "./order/OrderProvider";
 import { Magnetic, ease } from "./motion";
 import { INTRO_SECONDS } from "./fx/Intro";
+import { whenIdle } from "./useDeferredMount";
 
 /** Frames pulled from the burger film; scrolling scrubs through them like a video. */
 const FRAMES = 192;
@@ -44,18 +45,42 @@ function useFilmCanvas(progress: MotionValue<number>, active: boolean) {
     // Coarse-to-fine: every 16th frame first, then fill the gaps, so scrubbing works while the rest stream in.
     const order: number[] = [];
     for (const step of [16, 8, 4, 2, 1]) for (let i = 0; i < FRAMES; i += step) if (!order.includes(i)) order.push(i);
-    for (const i of order) {
-      const img = new Image();
-      img.decoding = "async";
-      if (i < 16) img.fetchPriority = "high";
-      img.src = frameSrc(i, small);
-      // Decode ahead of time so drawing a frame never stalls the scroll.
-      img.decode().then(() => (img.dataset.ready = "1"), () => {});
-      list[i] = img;
-    }
+
+    let stopped = false;
+    const load = (i: number) =>
+      new Promise<void>((done) => {
+        const img = new Image();
+        img.src = frameSrc(i, small);
+        list[i] = img;
+        // Decode ahead of time so drawing a frame never stalls the scroll.
+        img.decode().then(() => (img.dataset.ready = "1")).catch(() => {}).finally(done);
+      });
+    // A few at a time, so loading never competes with the opening animation for the main thread.
+    const pump = async () => {
+      while (!stopped && order.length) {
+        await Promise.all(order.splice(0, 3).map(load));
+      }
+    };
+
     frames.current = list;
+    // Frames 0–7 feed the idle steam loop at the top; the rest can wait.
+    const first = [0, 1, 2, 3, 4, 5, 6, 7];
+    order.splice(0, order.length, ...order.filter((i) => !first.includes(i)));
+    Promise.all(first.map(load));
+    let cancelIdle = () => {};
+    const start = () => {
+      window.removeEventListener("scroll", start);
+      window.clearTimeout(t);
+      cancelIdle = whenIdle(() => pump());
+    };
+    const t = window.setTimeout(start, (INTRO_SECONDS + 2.6) * 1000);
+    window.addEventListener("scroll", start, { passive: true, once: true });
     return () => {
-      for (const img of list) img.src = "";
+      stopped = true;
+      window.clearTimeout(t);
+      window.removeEventListener("scroll", start);
+      cancelIdle();
+      for (const img of list) if (img) img.src = "";
     };
   }, []);
 

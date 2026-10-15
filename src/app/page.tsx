@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { BurgerHero } from "@/components/BurgerHero";
 import { ExperienceBand } from "@/components/ExperienceBand";
 import { Features } from "@/components/Features";
@@ -27,21 +28,47 @@ export default function Home() {
       <Intro />
       <ScrollProgress />
       <Navbar actions={<CartNavButton />} />
+      {/* Each section is its own Suspense boundary so React hydrates them in small chunks,
+          yielding to the opening animation instead of blocking it. */}
       <main id="main">
         <BurgerHero />
-        <Marquee />
-        <Hero3D />
-        <FireScene />
-        <Features />
-        <Showcase />
-        <MenuBook />
-        <Story />
-        <ExperienceBand />
-        <Gallery />
-        <Testimonials />
-        <Reservation />
+        <Suspense>
+          <Marquee />
+        </Suspense>
+        <Suspense>
+          <Hero3D />
+        </Suspense>
+        <Suspense>
+          <FireScene />
+        </Suspense>
+        <Suspense>
+          <Features />
+        </Suspense>
+        <Suspense>
+          <Showcase />
+        </Suspense>
+        <Suspense>
+          <MenuBook />
+        </Suspense>
+        <Suspense>
+          <Story />
+        </Suspense>
+        <Suspense>
+          <ExperienceBand />
+        </Suspense>
+        <Suspense>
+          <Gallery />
+        </Suspense>
+        <Suspense>
+          <Testimonials />
+        </Suspense>
+        <Suspense>
+          <Reservation />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense>
+        <Footer />
+      </Suspense>
       <DishModal />
       <CartDrawer />
       <FloatingCart />
